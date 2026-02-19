@@ -18,15 +18,15 @@ export default function Header() {
 
   return (
     <header className="bg-white sticky top-0 z-50 shadow-md border-b border-gray-100">
-      <div className="container-custom flex items-center justify-between h-20">
+      <div className="container-custom flex items-center justify-between h-36">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/images/logo.png"
             alt="Jones Properties"
-            width={200}
-            height={60}
-            className="h-14 w-auto"
+            width={500}
+            height={150}
+            className="h-32 w-auto"
             priority
           />
         </Link>
