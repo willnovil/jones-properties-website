@@ -98,9 +98,9 @@ async function fetchProperty(propertyId: string): Promise<Property | null> {
     const address = p.address || "";
 
     // Match scraped images from jonesproperties.biz
-    const matchedImage = findPropertyImage(address, name);
-    const images: PropertyImage[] = matchedImage && matchedImage.image
-      ? [{ url: matchedImage.image, caption: matchedImage.name, isPrimary: true }]
+    const matchedEntry = findPropertyImage(address, name);
+    const images: PropertyImage[] = matchedEntry
+      ? matchedEntry.images.map((url, i) => ({ url, caption: matchedEntry.name, isPrimary: i === 0 }))
       : [];
 
     return {

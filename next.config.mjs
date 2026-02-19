@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "jonesproperties.biz",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+      },
     ],
   },
 };
