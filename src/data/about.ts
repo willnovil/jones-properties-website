@@ -1,7 +1,7 @@
 export const aboutContent = {
   headline: "Cleveland's Trusted Property Management Company",
   intro:
-    "Jones Properties has been serving the Cleveland, Tennessee community for over two decades. We manage a portfolio of 90+ residential and commercial rental properties, providing quality housing and professional spaces for families, individuals, and businesses throughout Bradley County.",
+    "Jones Properties has been serving the Cleveland, Tennessee community for over two decades. We manage a portfolio of 500+ residential and commercial rental properties, providing quality housing and professional spaces for families, individuals, and businesses throughout Bradley County.",
   story: [
     "Founded with a commitment to improving Cleveland's neighborhoods one property at a time, Jones Properties has grown from a small local operation into one of the region's most trusted property management companies.",
     "Our hands-on approach means we treat every property as if it were our own. From routine maintenance to major renovations, we invest in our properties to ensure our tenants have comfortable, well-maintained spaces they're proud to call home.",
@@ -31,7 +31,7 @@ export const aboutContent = {
     {
       title: "Property Management",
       description:
-        "Professional management of 90+ residential and commercial properties throughout Cleveland and Bradley County.",
+        "Professional management of 500+ residential and commercial properties throughout Cleveland and Bradley County.",
     },
     {
       title: "Property Development",

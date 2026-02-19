@@ -24,7 +24,7 @@ export default function HeroBanner() {
           </h1>
           <p className="font-body text-white/80 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl">
             Discover quality apartments, houses, and commercial spaces managed
-            by a team that cares. 90+ properties across Cleveland and Bradley
+            by a team that cares. 500+ properties across Cleveland and Bradley
             County.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -45,7 +45,7 @@ export default function HeroBanner() {
           {/* Quick stats */}
           <div className="flex flex-wrap gap-8 mt-14 pt-8 border-t border-white/20">
             <div>
-              <p className="font-heading text-3xl font-bold text-white">90+</p>
+              <p className="font-heading text-3xl font-bold text-white">500+</p>
               <p className="font-body text-white/60 text-sm mt-1">
                 Properties Managed
               </p>

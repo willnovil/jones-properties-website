@@ -112,7 +112,7 @@ export default async function HomePage() {
                 Cleveland&apos;s Trusted Property Manager
               </h2>
               <p className="font-body text-white/70 text-lg leading-relaxed mb-6">
-                With over two decades of experience managing 90+ properties in
+                With over two decades of experience managing 500+ properties in
                 Cleveland, Tennessee, Jones Properties is committed to providing
                 quality housing and exceptional service to our tenants and
                 community.
@@ -128,7 +128,7 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                <p className="font-heading text-3xl font-bold text-white mb-1">90+</p>
+                <p className="font-heading text-3xl font-bold text-white mb-1">500+</p>
                 <p className="font-body text-white/60 text-sm">Properties</p>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">

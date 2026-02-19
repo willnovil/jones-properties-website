@@ -64,7 +64,7 @@ export const staticPages = {
       "Our investment strategy focuses on properties that can be improved to provide quality housing and commercial space while generating strong returns. We reinvest in our properties and our community.",
     ],
     highlights: [
-      "90+ properties in our managed portfolio",
+      "500+ properties in our managed portfolio",
       "Continuous property improvement and renovation",
       "Strategic acquisitions in growing neighborhoods",
       "Long-term commitment to Cleveland's development",

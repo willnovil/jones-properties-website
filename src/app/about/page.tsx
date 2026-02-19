@@ -7,7 +7,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about Jones Properties — Cleveland, Tennessee's trusted property management company with 90+ residential and commercial rental properties.",
+    "Learn about Jones Properties — Cleveland, Tennessee's trusted property management company with 500+ residential and commercial rental properties.",
 };
 
 export default function AboutPage() {

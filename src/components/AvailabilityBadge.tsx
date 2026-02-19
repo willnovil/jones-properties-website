@@ -18,14 +18,14 @@ export default function AvailabilityBadge({
         size === "sm" && "text-xs px-3 py-1",
         size === "md" && "text-sm px-4 py-1.5",
         available
-          ? "bg-available/10 text-available"
-          : "bg-unavailable/10 text-unavailable"
+          ? "bg-available text-white shadow-md"
+          : "bg-unavailable text-white shadow-md"
       )}
     >
       <span
         className={cn(
           "w-2 h-2 rounded-full",
-          available ? "bg-available" : "bg-unavailable"
+          available ? "bg-white" : "bg-white"
         )}
       />
       {available

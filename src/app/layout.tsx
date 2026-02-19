@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s | Jones Properties",
   },
   description:
-    "Professional property management in Cleveland, Tennessee. Browse 90+ apartments, houses, and commercial properties for rent. Online tenant portal available.",
+    "Professional property management in Cleveland, Tennessee. Browse 500+ apartments, houses, and commercial properties for rent. Online tenant portal available.",
   keywords: [
     "Cleveland TN rentals",
     "Cleveland Tennessee apartments",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jones Properties | Cleveland, TN Property Management",
     description:
-      "Professional property management in Cleveland, Tennessee. Browse 90+ rental properties.",
+      "Professional property management in Cleveland, Tennessee. Browse 500+ rental properties.",
     url: "https://www.jonesproperties.biz",
     siteName: "Jones Properties",
     locale: "en_US",
@@ -34,7 +34,7 @@ const jsonLd = {
   "@type": "RealEstateAgent",
   name: "Jones Properties",
   description:
-    "Professional property management in Cleveland, Tennessee. 90+ residential and commercial rental properties.",
+    "Professional property management in Cleveland, Tennessee. 500+ residential and commercial rental properties.",
   url: "https://www.jonesproperties.biz",
   telephone: "(423) 472-4000",
   email: "info@jonesproperties.biz",
