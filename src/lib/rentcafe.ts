@@ -7,6 +7,7 @@ import {
 } from "./types";
 import { getMockListings } from "../data/mock-properties";
 import { findPropertyImage } from "../data/property-images";
+import { getAllAdminPhotos } from "./blob-storage";
 
 const API_BASE = "https://api.rentcafe.com/rentcafeapi.aspx";
 const API_TOKEN = process.env.RENTCAFE_API_TOKEN;
@@ -97,11 +98,17 @@ async function fetchProperty(propertyId: string): Promise<Property | null> {
     const name = p.name || "";
     const address = p.address || "";
 
-    // Match scraped images from jonesproperties.biz
-    const matchedEntry = findPropertyImage(address, name);
-    const images: PropertyImage[] = matchedEntry
-      ? matchedEntry.images.map((url, i) => ({ url, caption: matchedEntry.name, isPrimary: i === 0 }))
-      : [];
+    // Try RentCafe gallery images first, fall back to Shopify scraped images
+    const rentCafeImages = await fetchPropertyImages(p.PropertyId || propertyId);
+    let images: PropertyImage[];
+    if (rentCafeImages.length > 0) {
+      images = rentCafeImages;
+    } else {
+      const matchedEntry = findPropertyImage(address, name);
+      images = matchedEntry
+        ? matchedEntry.images.map((url, i) => ({ url, caption: matchedEntry.name, isPrimary: i === 0 }))
+        : [];
+    }
 
     return {
       propertyId: p.PropertyId || propertyId,
@@ -214,6 +221,34 @@ async function fetchAvailability(propertyId: string): Promise<UnitAvailability[]
   }
 }
 
+// Fetch gallery images for a property from RentCafe
+async function fetchPropertyImages(propertyId: string): Promise<PropertyImage[]> {
+  const cacheKey = `images_${propertyId}`;
+  const cached = getCached<PropertyImage[]>(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const data = (await apiCall({
+      requestType: "images",
+      propertyId,
+    })) as Array<Record<string, string>>;
+
+    const images: PropertyImage[] = (Array.isArray(data) ? data : [])
+      .filter((img) => img.ImageURL && img.ImageURL.trim() !== "")
+      .map((img, i) => ({
+        url: img.ImageURL,
+        caption: img.Caption || img.Title || undefined,
+        isPrimary: i === 0,
+        source: "shopify" as const, // tagged generically since these are from RentCafe CDN
+      }));
+
+    setCache(cacheKey, images);
+    return images;
+  } catch {
+    return [];
+  }
+}
+
 // Helper: parse unit image URLs
 function parseUnitImages(raw: unknown): PropertyImage[] {
   if (!raw) return [];
@@ -266,6 +301,14 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
 
   const properties = await fetchAllProperties();
 
+  // Fetch admin photos once for all properties
+  let adminPhotosMap: Record<string, PropertyImage[]> = {};
+  try {
+    adminPhotosMap = await getAllAdminPhotos();
+  } catch {
+    // Admin photos unavailable (e.g. no BLOB_READ_WRITE_TOKEN) — continue without them
+  }
+
   // Fetch floorplans and availability in batches of 5 properties at a time
   const listings = await batchProcess(
     properties,
@@ -275,11 +318,17 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
         fetchAvailability(property.propertyId),
       ]);
 
-      const allImages = [
+      const baseImages = [
         ...property.images,
         ...floorPlans.flatMap((fp) => fp.images),
         ...availableUnits.flatMap((u) => u.images),
       ].filter((img) => img.url && img.url.trim() !== "");
+
+      // 3-layer merge: admin primary > RentCafe/Shopify > remaining admin
+      const adminPhotos = adminPhotosMap[property.propertyId] || [];
+      const primaryAdmin = adminPhotos.filter((p) => p.isPrimary);
+      const otherAdmin = adminPhotos.filter((p) => !p.isPrimary);
+      const allImages = [...primaryAdmin, ...baseImages, ...otherAdmin];
 
       const allAmenities = [
         ...property.amenities,

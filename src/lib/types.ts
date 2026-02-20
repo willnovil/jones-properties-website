@@ -21,6 +21,16 @@ export interface PropertyImage {
   url: string;
   caption?: string;
   isPrimary?: boolean;
+  source?: "shopify" | "admin";
+}
+
+export interface AdminPhoto {
+  propertyId: string;
+  url: string;
+  caption?: string;
+  isPrimary: boolean;
+  uploadedAt: string;
+  filename: string;
 }
 
 export interface FloorPlan {
