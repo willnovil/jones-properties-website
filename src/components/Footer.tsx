@@ -109,9 +109,17 @@ export default function Footer() {
           <p className="font-body text-white/50 text-xs">
             &copy; {new Date().getFullYear()} Jones Properties. All rights reserved.
           </p>
-          <p className="font-body text-white/40 text-xs">
-            Cleveland, Tennessee Property Management
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="font-body text-white/40 text-xs">
+              Cleveland, Tennessee Property Management
+            </p>
+            <Link
+              href="/admin/login"
+              className="font-body text-white/30 hover:text-white/50 text-xs transition-colors"
+            >
+              Admin Login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
