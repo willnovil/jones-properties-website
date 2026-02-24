@@ -8,6 +8,7 @@ import {
 import { getMockListings } from "../data/mock-properties";
 import { findPropertyImage } from "../data/property-images";
 import { getAllAdminPhotos } from "./blob-storage";
+import { getStaticListings } from "../data/static-properties";
 
 const API_BASE = "https://api.rentcafe.com/rentcafeapi.aspx";
 const API_TOKEN = process.env.RENTCAFE_API_TOKEN;
@@ -293,7 +294,11 @@ function inferPropertyType(name: string, description: string): "apartment" | "ho
 
 export async function getPropertyListings(): Promise<PropertyListing[]> {
   if (!isApiConfigured) {
-    return getMockListings();
+    const mockListings = getMockListings();
+    const staticListings = getStaticListings(
+      mockListings.map((l) => ({ address: l.property.address, name: l.property.propertyName }))
+    );
+    return [...mockListings, ...staticListings];
   }
 
   const cached = getCached<PropertyListing[]>("all_listings");
@@ -310,7 +315,7 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
   }
 
   // Fetch floorplans and availability in batches of 5 properties at a time
-  const listings = await batchProcess(
+  const rentCafeListings = await batchProcess(
     properties,
     async (property) => {
       const [floorPlans, availableUnits] = await Promise.all([
@@ -358,6 +363,12 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
     },
     5
   );
+
+  // Merge in Shopify-only properties that don't exist in RentCafe
+  const staticListings = getStaticListings(
+    properties.map((p) => ({ address: p.address, name: p.propertyName }))
+  );
+  const listings = [...rentCafeListings, ...staticListings];
 
   setCache("all_listings", listings);
   return listings;

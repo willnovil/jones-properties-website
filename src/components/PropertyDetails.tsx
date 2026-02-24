@@ -168,14 +168,25 @@ export default function PropertyDetails({ listing }: PropertyDetailsProps) {
 
       {/* CTA */}
       <div className="flex flex-col sm:flex-row gap-4 pt-4">
-        <a
-          href={portalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-primary text-center"
-        >
-          Apply Now
-        </a>
+        {property.propertyId.startsWith("static-") ? (
+          <a
+            href={property.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary text-center"
+          >
+            Learn More
+          </a>
+        ) : (
+          <a
+            href={portalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary text-center"
+          >
+            Apply Now
+          </a>
+        )}
         <a href="/contact" className="btn-outline text-center">
           Contact Us About This Property
         </a>

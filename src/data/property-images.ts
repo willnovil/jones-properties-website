@@ -107,7 +107,7 @@ export const propertyImages: PropertyImageEntry[] = [
 ];
 
 // Normalize an address for fuzzy matching
-function normalize(addr: string): string {
+export function normalize(addr: string): string {
   return addr
     .toLowerCase()
     .replace(/[.,#]/g, "")
@@ -118,7 +118,7 @@ function normalize(addr: string): string {
 }
 
 // Extract the leading number from an address
-function leadingNumber(addr: string): string {
+export function leadingNumber(addr: string): string {
   const match = addr.match(/^[\d-]+/);
   return match ? match[0] : "";
 }
