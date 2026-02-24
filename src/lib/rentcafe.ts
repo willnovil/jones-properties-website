@@ -124,7 +124,7 @@ async function fetchProperty(propertyId: string): Promise<Property | null> {
       description: p.description || "",
       images,
       amenities: [],
-      type: inferPropertyType(name, p.description || ""),
+      type: inferPropertyType(name, p.description || "", p.PropertyId || propertyId),
       petFriendly: (p.description || "").toLowerCase().includes("pet"),
       latitude: parseFloat(p.Latitude) || undefined,
       longitude: parseFloat(p.Longitude) || undefined,
@@ -269,8 +269,19 @@ function parseAmenities(raw: unknown): string[] {
   return [];
 }
 
+// Explicit type overrides for properties that the heuristic gets wrong
+const PROPERTY_TYPE_OVERRIDES: Record<string, "apartment" | "house" | "commercial"> = {
+  "662273": "house",       // 334 Old Freewill Dr NW
+  "662221": "apartment",   // Brass Lantern Apartments
+  "662239": "house",       // 1730 Brown Ave
+  "662269": "apartment",   // Breckenridge Apartments
+};
+
 // Helper: infer property type from name and description
-function inferPropertyType(name: string, description: string): "apartment" | "house" | "commercial" {
+function inferPropertyType(name: string, description: string, propertyId?: string): "apartment" | "house" | "commercial" {
+  if (propertyId && PROPERTY_TYPE_OVERRIDES[propertyId]) {
+    return PROPERTY_TYPE_OVERRIDES[propertyId];
+  }
   const text = `${name} ${description}`.toLowerCase();
   if (text.includes("commercial") || text.includes("office") || text.includes("retail") || text.includes("warehouse")) {
     return "commercial";
