@@ -37,7 +37,7 @@ const jsonLd = {
     "Quality rental properties in Cleveland, Tennessee. 500+ residential and commercial spaces for rent.",
   url: "https://www.jonesproperties.biz",
   telephone: "(423) 472-4000",
-  email: "info@jonesproperties.biz",
+  email: "ehale@jonesmanagement.com",
   address: {
     "@type": "PostalAddress",
     streetAddress: "201 Keith Street SW, Suite 80",

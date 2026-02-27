@@ -89,10 +89,10 @@ export default function Footer() {
               <p>
                 <span className="text-white/50">Email:</span>{" "}
                 <a
-                  href="mailto:info@jonesproperties.biz"
+                  href="mailto:ehale@jonesmanagement.com"
                   className="hover:text-accent transition-colors"
                 >
-                  info@jonesproperties.biz
+                  ehale@jonesmanagement.com
                 </a>
               </p>
               <p className="pt-2">

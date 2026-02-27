@@ -1,8 +1,20 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import HeroBanner from "../components/HeroBanner";
 import PropertyCard from "../components/PropertyCard";
 import CategoryCard from "../components/CategoryCard";
 import { getPropertyListings } from "../lib/rentcafe";
+
+export const metadata: Metadata = {
+  title: "Jones Properties | Apartments & Houses for Rent in Cleveland, TN",
+  description:
+    "Browse 500+ apartments, houses, and commercial spaces for rent in Cleveland, Tennessee. Pet-friendly options available. Apply online today.",
+  openGraph: {
+    title: "Jones Properties | Apartments & Houses for Rent in Cleveland, TN",
+    description:
+      "Browse 500+ apartments, houses, and commercial spaces for rent in Cleveland, Tennessee. Apply online today.",
+  },
+};
 
 export const revalidate = 900; // Revalidate every 15 minutes
 

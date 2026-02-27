@@ -82,8 +82,8 @@ export default function ContactPage() {
                     </svg>
                     <div>
                       <p className="font-body text-sm font-semibold text-foreground mb-0.5">Email</p>
-                      <a href="mailto:info@jonesproperties.biz" className="font-body text-sm text-accent hover:text-accent-light transition-colors">
-                        info@jonesproperties.biz
+                      <a href="mailto:ehale@jonesmanagement.com" className="font-body text-sm text-accent hover:text-accent-light transition-colors">
+                        ehale@jonesmanagement.com
                       </a>
                     </div>
                   </div>
