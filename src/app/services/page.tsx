@@ -5,7 +5,7 @@ import { staticPages } from "../../data/static-pages";
 export const metadata: Metadata = {
   title: "Property Services",
   description:
-    "Full-service property management in Cleveland, TN. Tenant placement, rent collection, maintenance, inspections, and more.",
+    "Quality rental properties in Cleveland, TN. Well-maintained apartments, houses, and commercial spaces with professional on-site management.",
 };
 
 export default function ServicesPage() {
@@ -71,10 +71,10 @@ export default function ServicesPage() {
         <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">
-              Own a Property?
+              Looking for Your Next Home?
             </h2>
             <p className="font-body text-white/80">
-              Let us manage it for you. Contact us to learn about our property management services.
+              Browse our available properties or contact us to find the perfect rental for you.
             </p>
           </div>
           <Link

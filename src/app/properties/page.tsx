@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import PropertyGrid from "../../components/PropertyGrid";
 import { getPropertyListings } from "../../lib/rentcafe";
+import { PropertyType } from "../../lib/types";
 
 export const metadata: Metadata = {
   title: "Properties for Rent",
@@ -10,8 +11,17 @@ export const metadata: Metadata = {
 
 export const revalidate = 900;
 
-export default async function PropertiesPage() {
+const validTypes: PropertyType[] = ["apartment", "house", "commercial", "all"];
+
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: { type?: string };
+}) {
   const listings = await getPropertyListings();
+  const initialType = validTypes.includes(searchParams.type as PropertyType)
+    ? (searchParams.type as PropertyType)
+    : "all";
 
   return (
     <>
@@ -34,7 +44,7 @@ export default async function PropertiesPage() {
       {/* Properties Grid */}
       <section className="section-padding bg-background">
         <div className="container-custom">
-          <PropertyGrid listings={listings} />
+          <PropertyGrid listings={listings} initialType={initialType} />
         </div>
       </section>
     </>

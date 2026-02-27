@@ -18,10 +18,10 @@ export const staticPages = {
   },
   services: {
     title: "Property Services",
-    subtitle: "Comprehensive Property Management Solutions",
+    subtitle: "How We Take Care of Our Properties and Tenants",
     content: [
-      "Jones Properties provides full-service property management for residential and commercial properties throughout Cleveland and Bradley County, Tennessee.",
-      "Our experienced team handles every aspect of property management, allowing property owners to enjoy passive income without the day-to-day hassles.",
+      "Jones Properties owns and manages residential and commercial properties throughout Cleveland and Bradley County, Tennessee.",
+      "Our experienced team handles every aspect of our properties — from maintenance and inspections to tenant services — ensuring quality living and working spaces for our renters.",
     ],
     servicesList: [
       {
@@ -45,9 +45,9 @@ export const staticPages = {
           "Regular property inspections to ensure properties are well-maintained and identify issues early.",
       },
       {
-        title: "Financial Reporting",
+        title: "Financial Transparency",
         description:
-          "Detailed monthly statements and annual reports for property owners, simplifying tax preparation.",
+          "Clear and upfront pricing with no hidden fees. Detailed lease terms and easy online rent payment.",
       },
       {
         title: "Lease Management",
@@ -64,7 +64,7 @@ export const staticPages = {
       "Our investment strategy focuses on properties that can be improved to provide quality housing and commercial space while generating strong returns. We reinvest in our properties and our community.",
     ],
     highlights: [
-      "500+ properties in our managed portfolio",
+      "500+ properties in our owned portfolio",
       "Continuous property improvement and renovation",
       "Strategic acquisitions in growing neighborhoods",
       "Long-term commitment to Cleveland's development",

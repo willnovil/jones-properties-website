@@ -109,18 +109,18 @@ export default async function HomePage() {
                 About Jones Properties
               </p>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-6">
-                Cleveland&apos;s Trusted Property Manager
+                Cleveland&apos;s Trusted Property Owner
               </h2>
               <p className="font-body text-white/70 text-lg leading-relaxed mb-6">
-                With over two decades of experience managing 500+ properties in
+                With over two decades of owning and operating 500+ properties in
                 Cleveland, Tennessee, Jones Properties is committed to providing
                 quality housing and exceptional service to our tenants and
                 community.
               </p>
               <p className="font-body text-white/60 leading-relaxed mb-8">
                 From apartments and single-family homes to commercial spaces, we
-                handle every aspect of property management so you can focus on
-                what matters most.
+                own and maintain every property in our portfolio to the highest
+                standards.
               </p>
               <Link href="/about" className="bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-8 rounded transition-colors duration-200">
                 Learn More About Us

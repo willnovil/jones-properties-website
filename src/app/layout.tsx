@@ -5,23 +5,23 @@ import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: {
-    default: "Jones Properties | Cleveland, TN Property Management",
+    default: "Jones Properties | Cleveland, TN Rental Properties",
     template: "%s | Jones Properties",
   },
   description:
-    "Professional property management in Cleveland, Tennessee. Browse 500+ apartments, houses, and commercial properties for rent. Online tenant portal available.",
+    "Quality rental properties in Cleveland, Tennessee. Browse 500+ apartments, houses, and commercial spaces for rent. Online tenant portal available.",
   keywords: [
     "Cleveland TN rentals",
     "Cleveland Tennessee apartments",
-    "property management Cleveland TN",
+    "rental properties Cleveland TN",
     "houses for rent Cleveland TN",
     "Jones Properties",
     "commercial space Cleveland TN",
   ],
   openGraph: {
-    title: "Jones Properties | Cleveland, TN Property Management",
+    title: "Jones Properties | Cleveland, TN Rental Properties",
     description:
-      "Professional property management in Cleveland, Tennessee. Browse 500+ rental properties.",
+      "Quality rental properties in Cleveland, Tennessee. Browse 500+ apartments, houses, and commercial spaces for rent.",
     url: "https://www.jonesproperties.biz",
     siteName: "Jones Properties",
     locale: "en_US",
@@ -34,7 +34,7 @@ const jsonLd = {
   "@type": "RealEstateAgent",
   name: "Jones Properties",
   description:
-    "Professional property management in Cleveland, Tennessee. 500+ residential and commercial rental properties.",
+    "Quality rental properties in Cleveland, Tennessee. 500+ residential and commercial spaces for rent.",
   url: "https://www.jonesproperties.biz",
   telephone: "(423) 472-4000",
   email: "info@jonesproperties.biz",

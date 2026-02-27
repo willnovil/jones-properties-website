@@ -25,8 +25,8 @@ export default function Footer() {
               Jones Properties
             </h3>
             <p className="font-body text-white/70 text-sm leading-relaxed mb-4">
-              Professional property management serving Cleveland, Tennessee and
-              the surrounding communities. 90+ residential and commercial
+              Locally owned rental properties serving Cleveland, Tennessee and
+              the surrounding communities. 500+ residential and commercial
               rental properties.
             </p>
             <p className="font-body text-accent font-semibold">
@@ -111,7 +111,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <p className="font-body text-white/40 text-xs">
-              Cleveland, Tennessee Property Management
+              Cleveland, Tennessee Rental Properties
             </p>
             <Link
               href="/admin/login"

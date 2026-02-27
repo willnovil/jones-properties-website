@@ -1,10 +1,10 @@
 export const aboutContent = {
-  headline: "Cleveland's Trusted Property Management Company",
+  headline: "Cleveland's Trusted Property Owner",
   intro:
-    "Jones Properties has been serving the Cleveland, Tennessee community for over two decades. We manage a portfolio of 500+ residential and commercial rental properties, providing quality housing and professional spaces for families, individuals, and businesses throughout Bradley County.",
+    "Jones Properties has been part of the Cleveland, Tennessee community for over two decades. We own and operate 500+ residential and commercial rental properties, providing quality housing and professional spaces for families, individuals, and businesses throughout Bradley County.",
   story: [
-    "Founded with a commitment to improving Cleveland's neighborhoods one property at a time, Jones Properties has grown from a small local operation into one of the region's most trusted property management companies.",
-    "Our hands-on approach means we treat every property as if it were our own. From routine maintenance to major renovations, we invest in our properties to ensure our tenants have comfortable, well-maintained spaces they're proud to call home.",
+    "Founded with a commitment to improving Cleveland's neighborhoods one property at a time, Jones Properties has grown from a small local operation into one of the region's most trusted rental property owners.",
+    "Our hands-on approach means every property we own is maintained to the highest standards. From routine maintenance to major renovations, we invest in our properties to ensure our tenants have comfortable, well-maintained spaces they're proud to call home.",
     "We believe in the growth potential of Cleveland and the surrounding area. That's why we continue to expand our portfolio and invest in property development that enhances our community.",
   ],
   mission:
@@ -29,9 +29,9 @@ export const aboutContent = {
   ],
   serviceAreas: [
     {
-      title: "Property Management",
+      title: "Rental Properties",
       description:
-        "Professional management of 500+ residential and commercial properties throughout Cleveland and Bradley County.",
+        "500+ owned residential and commercial properties throughout Cleveland and Bradley County.",
     },
     {
       title: "Property Development",
