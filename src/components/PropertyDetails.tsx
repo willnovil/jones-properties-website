@@ -8,7 +8,6 @@ interface PropertyDetailsProps {
 
 export default function PropertyDetails({ listing }: PropertyDetailsProps) {
   const { property, floorPlans, availableUnits } = listing;
-  const portalUrl = process.env.RENTCAFE_PORTAL_URL || "#";
 
   return (
     <div className="space-y-8">
@@ -128,16 +127,12 @@ export default function PropertyDetails({ listing }: PropertyDetailsProps) {
                         : "Now"}
                     </td>
                     <td className="py-3">
-                      {unit.applyUrl ? (
-                        <a
-                          href={unit.applyUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-body text-sm font-semibold text-accent hover:text-accent-light transition-colors"
-                        >
-                          Apply
-                        </a>
-                      ) : null}
+                      <a
+                        href="/contact"
+                        className="font-body text-sm font-semibold text-accent hover:text-accent-light transition-colors"
+                      >
+                        Inquire
+                      </a>
                     </td>
                   </tr>
                 ))}
@@ -168,27 +163,11 @@ export default function PropertyDetails({ listing }: PropertyDetailsProps) {
 
       {/* CTA */}
       <div className="flex flex-col sm:flex-row gap-4 pt-4">
-        {property.propertyId.startsWith("static-") ? (
-          <a
-            href={property.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary text-center"
-          >
-            Learn More
-          </a>
-        ) : (
-          <a
-            href={portalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary text-center"
-          >
-            Apply Now
-          </a>
-        )}
-        <a href="/contact" className="btn-outline text-center">
+        <a href="/contact" className="btn-primary text-center">
           Contact Us About This Property
+        </a>
+        <a href="tel:4234724000" className="btn-outline text-center">
+          Call (423) 472-4000
         </a>
       </div>
 
@@ -211,13 +190,13 @@ export default function PropertyDetails({ listing }: PropertyDetailsProps) {
             (423) 472-4000
           </a>
           <a
-            href="mailto:info@jonesproperties.biz"
+            href="mailto:ehale@jonesmanagement.com"
             className="flex items-center gap-2 font-body text-foreground/70 hover:text-accent transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            info@jonesproperties.biz
+            ehale@jonesmanagement.com
           </a>
         </div>
       </div>
