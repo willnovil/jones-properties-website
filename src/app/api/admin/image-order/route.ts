@@ -5,6 +5,8 @@ import {
   type ImageOrderEntry,
 } from "../../../../lib/blob-storage";
 
+export const dynamic = "force-dynamic";
+
 // GET ?propertyId=X — returns saved image order (or null)
 export async function GET(request: NextRequest) {
   const propertyId = request.nextUrl.searchParams.get("propertyId");
@@ -12,12 +14,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "propertyId required" }, { status: 400 });
   }
 
-  const order = await getPropertyImageOrder(propertyId);
-  return NextResponse.json({ order });
+  try {
+    const order = await getPropertyImageOrder(propertyId);
+    return NextResponse.json({ order });
+  } catch (err) {
+    console.error("Failed to get image order:", err);
+    return NextResponse.json({ order: null });
+  }
 }
 
-// PUT { propertyId, order } — saves new image order
-export async function PUT(request: NextRequest) {
+// POST { propertyId, order } — saves new image order
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { propertyId, order } = body as {
@@ -36,9 +43,10 @@ export async function PUT(request: NextRequest) {
     await savePropertyImageOrder(propertyId, order);
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Failed to save image order:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("Failed to save image order:", message, err);
     return NextResponse.json(
-      { error: "Failed to save image order" },
+      { error: `Failed to save: ${message}` },
       { status: 500 }
     );
   }

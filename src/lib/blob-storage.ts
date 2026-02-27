@@ -182,9 +182,9 @@ export async function savePropertyImageOrder(propertyId: string, order: ImageOrd
   allOrders[propertyId] = order;
 
   const json = JSON.stringify(allOrders, null, 2);
-  await put(IMAGE_ORDER_PATH, json, {
+  const blob = new Blob([json], { type: "application/json" });
+  await put(IMAGE_ORDER_PATH, blob, {
     access: "public",
     addRandomSuffix: false,
-    contentType: "application/json",
   });
 }

@@ -17,6 +17,7 @@ export default function ImageReorder({ propertyId, initialOrder, onSaved }: Prop
   const [order, setOrder] = useState<ImageOrderEntry[]>(initialOrder);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   function moveUp(index: number) {
     if (index === 0) return;
@@ -24,6 +25,7 @@ export default function ImageReorder({ propertyId, initialOrder, onSaved }: Prop
     [next[index - 1], next[index]] = [next[index], next[index - 1]];
     setOrder(next);
     setDirty(true);
+    setStatus(null);
   }
 
   function moveDown(index: number) {
@@ -32,25 +34,39 @@ export default function ImageReorder({ propertyId, initialOrder, onSaved }: Prop
     [next[index], next[index + 1]] = [next[index + 1], next[index]];
     setOrder(next);
     setDirty(true);
+    setStatus(null);
   }
 
   async function handleSave() {
     setSaving(true);
+    setStatus(null);
     try {
       const res = await fetch("/api/admin/image-order", {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ propertyId, order }),
-        redirect: "error",
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.error || `Save failed (${res.status})`);
+
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        setStatus(`Server returned non-JSON: ${text.slice(0, 200)}`);
+        return;
       }
+
+      if (!res.ok) {
+        setStatus(`Error ${res.status}: ${data?.error || text.slice(0, 200)}`);
+        return;
+      }
+
       setDirty(false);
+      setStatus("Saved!");
+      setTimeout(() => setStatus(null), 3000);
       onSaved();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to save image order. Please try again.");
+      setStatus(`Network error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setSaving(false);
     }
@@ -139,8 +155,13 @@ export default function ImageReorder({ propertyId, initialOrder, onSaved }: Prop
         >
           {saving ? "Saving..." : "Save Order"}
         </button>
-        {dirty && (
+        {dirty && !status && (
           <span className="text-sm text-amber-600">Unsaved changes</span>
+        )}
+        {status && (
+          <span className={`text-sm ${status.startsWith("Saved") ? "text-green-600" : "text-red-600"}`}>
+            {status}
+          </span>
         )}
       </div>
     </div>
