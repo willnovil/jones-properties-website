@@ -19,13 +19,19 @@ export const metadata: Metadata = {
     "commercial space Cleveland TN",
   ],
   openGraph: {
-    title: "Jones Properties | Cleveland, TN Rental Properties",
+    title: "Jones Properties | Live in Cleveland, TN",
     description:
-      "Quality rental properties in Cleveland, Tennessee. Browse 500+ apartments, houses, and commercial spaces for rent.",
+      "500+ apartments, houses & commercial spaces for rent. Call (423) 472-4000",
     url: "https://www.jonesproperties.biz",
     siteName: "Jones Properties",
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jones Properties | Live in Cleveland, TN",
+    description:
+      "500+ apartments, houses & commercial spaces for rent. Call (423) 472-4000",
   },
 };
 
