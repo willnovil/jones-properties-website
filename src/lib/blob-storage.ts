@@ -1,6 +1,17 @@
 import { put, list, del } from "@vercel/blob";
 import type { PropertyImage } from "./types";
 
+// === Image Order Types ===
+
+export interface ImageOrderEntry {
+  url: string;
+  source: "shopify" | "admin";
+}
+
+export interface ImageOrderData {
+  [propertyId: string]: ImageOrderEntry[];
+}
+
 export interface AdminPhotoMetadata {
   propertyId: string;
   url: string;
@@ -136,6 +147,43 @@ async function saveMetadata(metadata: AllMetadata): Promise<void> {
   const json = JSON.stringify(metadata, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   await put(METADATA_PATH, blob, {
+    access: "public",
+    addRandomSuffix: false,
+  });
+}
+
+// === Image Order Functions ===
+
+const IMAGE_ORDER_PATH = "admin-photos/_image-order.json";
+
+// Get all image orders for all properties
+export async function getImageOrder(): Promise<ImageOrderData> {
+  try {
+    const blobs = await list({ prefix: IMAGE_ORDER_PATH });
+    if (blobs.blobs.length === 0) return {};
+
+    const response = await fetch(blobs.blobs[0].url, { cache: "no-store" });
+    if (!response.ok) return {};
+    return (await response.json()) as ImageOrderData;
+  } catch {
+    return {};
+  }
+}
+
+// Get image order for a single property
+export async function getPropertyImageOrder(propertyId: string): Promise<ImageOrderEntry[] | null> {
+  const allOrders = await getImageOrder();
+  return allOrders[propertyId] || null;
+}
+
+// Save image order for a single property
+export async function savePropertyImageOrder(propertyId: string, order: ImageOrderEntry[]): Promise<void> {
+  const allOrders = await getImageOrder();
+  allOrders[propertyId] = order;
+
+  const json = JSON.stringify(allOrders, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  await put(IMAGE_ORDER_PATH, blob, {
     access: "public",
     addRandomSuffix: false,
   });

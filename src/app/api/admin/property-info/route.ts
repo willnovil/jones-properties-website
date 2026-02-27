@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     shopifyImages: listing.property.images.map((img) => ({
       url: img.url,
       caption: img.caption,
+      source: img.source || "shopify",
     })),
   });
 }

@@ -4,13 +4,25 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import AdminPhotoUploader from "../../../../components/admin/AdminPhotoUploader";
 import AdminPhotoGrid from "../../../../components/admin/AdminPhotoGrid";
+import ImageReorder from "../../../../components/admin/ImageReorder";
 import type { AdminPhotoMetadata } from "../../../../lib/blob-storage";
+
+interface ImageWithSource {
+  url: string;
+  caption?: string;
+  source: "shopify" | "admin";
+}
 
 interface PropertyInfo {
   propertyId: string;
   propertyName: string;
   address: string;
-  shopifyImages: { url: string; caption?: string }[];
+  shopifyImages: ImageWithSource[];
+}
+
+interface ImageOrderEntry {
+  url: string;
+  source: "shopify" | "admin";
 }
 
 export default function PropertyPhotoManager({
@@ -20,35 +32,119 @@ export default function PropertyPhotoManager({
 }) {
   const [property, setProperty] = useState<PropertyInfo | null>(null);
   const [adminPhotos, setAdminPhotos] = useState<AdminPhotoMetadata[]>([]);
+  const [imageOrder, setImageOrder] = useState<ImageOrderEntry[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Build the unified image list from all sources + saved order
+  const buildUnifiedOrder = useCallback(
+    (
+      shopifyImages: ImageWithSource[],
+      photos: AdminPhotoMetadata[],
+      savedOrder: ImageOrderEntry[] | null
+    ): ImageOrderEntry[] => {
+      // Collect all current image URLs with their sources
+      const allImages: ImageOrderEntry[] = [
+        ...shopifyImages.map((img) => ({
+          url: img.url,
+          source: (img.source || "shopify") as "shopify" | "admin",
+        })),
+        ...photos.map((p) => ({
+          url: p.url,
+          source: "admin" as const,
+        })),
+      ];
+
+      if (!savedOrder || savedOrder.length === 0) {
+        return allImages;
+      }
+
+      // Use saved order: keep entries that still exist, append new ones
+      const currentUrls = new Set(allImages.map((img) => img.url));
+      const orderedUrls = new Set<string>();
+
+      const result: ImageOrderEntry[] = [];
+
+      // Add saved-order entries that still exist
+      for (const entry of savedOrder) {
+        if (currentUrls.has(entry.url)) {
+          result.push(entry);
+          orderedUrls.add(entry.url);
+        }
+      }
+
+      // Append any new images not in saved order
+      for (const img of allImages) {
+        if (!orderedUrls.has(img.url)) {
+          result.push(img);
+        }
+      }
+
+      return result;
+    },
+    []
+  );
 
   const loadPhotos = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/photos?propertyId=${params.id}`);
       const data = await res.json();
-      setAdminPhotos(data.photos || []);
+      return (data.photos || []) as AdminPhotoMetadata[];
     } catch {
-      // ignore
+      return [];
     }
   }, [params.id]);
+
+  const loadSavedOrder = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/admin/image-order?propertyId=${params.id}`);
+      const data = await res.json();
+      return (data.order || null) as ImageOrderEntry[] | null;
+    } catch {
+      return null;
+    }
+  }, [params.id]);
+
+  const refreshAll = useCallback(async () => {
+    const [photos, savedOrder] = await Promise.all([
+      loadPhotos(),
+      loadSavedOrder(),
+    ]);
+    setAdminPhotos(photos);
+
+    if (property) {
+      const unified = buildUnifiedOrder(property.shopifyImages, photos, savedOrder);
+      setImageOrder(unified);
+    }
+  }, [loadPhotos, loadSavedOrder, property, buildUnifiedOrder]);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
       try {
-        // Fetch property info from the public listings API
-        const propRes = await fetch(`/api/admin/property-info?id=${params.id}`);
+        const [propRes, photos, savedOrder] = await Promise.all([
+          fetch(`/api/admin/property-info?id=${params.id}`),
+          loadPhotos(),
+          loadSavedOrder(),
+        ]);
+
+        let propData: PropertyInfo | null = null;
         if (propRes.ok) {
-          const data = await propRes.json();
-          setProperty(data);
+          propData = await propRes.json();
+          setProperty(propData);
         }
-        await loadPhotos();
+
+        setAdminPhotos(photos);
+
+        // Build unified order
+        const shopifyImages = propData?.shopifyImages || [];
+        const unified = buildUnifiedOrder(shopifyImages, photos, savedOrder);
+        setImageOrder(unified);
       } finally {
         setLoading(false);
       }
     }
     load();
-  }, [params.id, loadPhotos]);
+  }, [params.id, loadPhotos, loadSavedOrder, buildUnifiedOrder]);
 
   if (loading) {
     return <p className="text-gray-500">Loading...</p>;
@@ -69,6 +165,22 @@ export default function PropertyPhotoManager({
       {property?.address && (
         <p className="text-gray-500 mb-6">{property.address}</p>
       )}
+
+      {/* Image Order Section */}
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold text-gray-800 mb-1">
+          Image Order ({imageOrder.length})
+        </h2>
+        <p className="text-sm text-gray-500 mb-3">
+          The first image becomes the property thumbnail on the public site.
+          Use the arrows to reorder, then click Save.
+        </p>
+        <ImageReorder
+          propertyId={params.id}
+          initialOrder={imageOrder}
+          onSaved={refreshAll}
+        />
+      </section>
 
       {/* Shopify Images (read-only) */}
       {property?.shopifyImages && property.shopifyImages.length > 0 && (
@@ -106,7 +218,7 @@ export default function PropertyPhotoManager({
         </h2>
         <AdminPhotoUploader
           propertyId={params.id}
-          onUploadComplete={loadPhotos}
+          onUploadComplete={refreshAll}
         />
       </section>
 
@@ -114,7 +226,7 @@ export default function PropertyPhotoManager({
       <AdminPhotoGrid
         photos={adminPhotos}
         propertyId={params.id}
-        onUpdate={loadPhotos}
+        onUpdate={refreshAll}
       />
     </div>
   );

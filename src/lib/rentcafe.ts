@@ -5,9 +5,8 @@ import {
   PropertyListing,
   PropertyImage,
 } from "./types";
-import { getMockListings } from "../data/mock-properties";
 import { findPropertyImage } from "../data/property-images";
-import { getAllAdminPhotos } from "./blob-storage";
+import { getAllAdminPhotos, getImageOrder, type ImageOrderData } from "./blob-storage";
 import { getStaticListings } from "../data/static-properties";
 
 const API_BASE = "https://api.rentcafe.com/rentcafeapi.aspx";
@@ -305,11 +304,7 @@ function inferPropertyType(name: string, description: string, propertyId?: strin
 
 export async function getPropertyListings(): Promise<PropertyListing[]> {
   if (!isApiConfigured) {
-    const mockListings = getMockListings();
-    const staticListings = getStaticListings(
-      mockListings.map((l) => ({ address: l.property.address, name: l.property.propertyName }))
-    );
-    return [...mockListings, ...staticListings];
+    return getStaticListings([]);
   }
 
   const cached = getCached<PropertyListing[]>("all_listings");
@@ -317,12 +312,16 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
 
   const properties = await fetchAllProperties();
 
-  // Fetch admin photos once for all properties
+  // Fetch admin photos and saved image orders once for all properties
   let adminPhotosMap: Record<string, PropertyImage[]> = {};
+  let imageOrderMap: ImageOrderData = {};
   try {
-    adminPhotosMap = await getAllAdminPhotos();
+    [adminPhotosMap, imageOrderMap] = await Promise.all([
+      getAllAdminPhotos(),
+      getImageOrder(),
+    ]);
   } catch {
-    // Admin photos unavailable (e.g. no BLOB_READ_WRITE_TOKEN) — continue without them
+    // Admin photos/orders unavailable (e.g. no BLOB_READ_WRITE_TOKEN) — continue without them
   }
 
   // Fetch floorplans and availability in batches of 5 properties at a time
@@ -344,7 +343,33 @@ export async function getPropertyListings(): Promise<PropertyListing[]> {
       const adminPhotos = adminPhotosMap[property.propertyId] || [];
       const primaryAdmin = adminPhotos.filter((p) => p.isPrimary);
       const otherAdmin = adminPhotos.filter((p) => !p.isPrimary);
-      const allImages = [...primaryAdmin, ...baseImages, ...otherAdmin];
+      let allImages = [...primaryAdmin, ...baseImages, ...otherAdmin];
+
+      // Apply saved image order if it exists
+      const savedOrder = imageOrderMap[property.propertyId];
+      if (savedOrder && savedOrder.length > 0) {
+        const imagesByUrl = new Map(allImages.map((img) => [img.url, img]));
+        const reordered: PropertyImage[] = [];
+        const usedUrls = new Set<string>();
+
+        // Add images in saved order (skip any that no longer exist)
+        for (const entry of savedOrder) {
+          const img = imagesByUrl.get(entry.url);
+          if (img) {
+            reordered.push(img);
+            usedUrls.add(entry.url);
+          }
+        }
+
+        // Append any new images not in saved order
+        for (const img of allImages) {
+          if (!usedUrls.has(img.url)) {
+            reordered.push(img);
+          }
+        }
+
+        allImages = reordered;
+      }
 
       const allAmenities = [
         ...property.amenities,
