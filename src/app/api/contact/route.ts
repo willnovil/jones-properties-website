@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 const NOTIFY_EMAIL = process.env.CONTACT_FORM_EMAIL || "wjones@jonesmanagement.com";
 
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
     // 1. Send email notification via Resend
     if (process.env.RESEND_API_KEY) {
       try {
-        await resend.emails.send({
+        await getResend().emails.send({
           from: "Jones Properties <onboarding@resend.dev>",
           to: [
             NOTIFY_EMAIL,
