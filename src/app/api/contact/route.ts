@@ -4,7 +4,6 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const NOTIFY_EMAIL = process.env.CONTACT_FORM_EMAIL || "wjones@jonesmanagement.com";
-const NOTIFY_EMAIL_CC = process.env.CONTACT_FORM_EMAIL_CC || "";
 
 const RENTCAFE_API_BASE = "https://api.rentcafe.com/rentcafeapi.aspx";
 const RENTCAFE_TOKEN = process.env.RENTCAFE_API_TOKEN;
