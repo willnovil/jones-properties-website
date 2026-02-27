@@ -18,20 +18,28 @@ export async function GET(request: NextRequest) {
 
 // PUT { propertyId, order } — saves new image order
 export async function PUT(request: NextRequest) {
-  const body = await request.json();
-  const { propertyId, order } = body as {
-    propertyId: string;
-    order: ImageOrderEntry[];
-  };
+  try {
+    const body = await request.json();
+    const { propertyId, order } = body as {
+      propertyId: string;
+      order: ImageOrderEntry[];
+    };
 
-  if (!propertyId) {
-    return NextResponse.json({ error: "propertyId required" }, { status: 400 });
+    if (!propertyId) {
+      return NextResponse.json({ error: "propertyId required" }, { status: 400 });
+    }
+
+    if (!Array.isArray(order)) {
+      return NextResponse.json({ error: "order must be an array" }, { status: 400 });
+    }
+
+    await savePropertyImageOrder(propertyId, order);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Failed to save image order:", err);
+    return NextResponse.json(
+      { error: "Failed to save image order" },
+      { status: 500 }
+    );
   }
-
-  if (!Array.isArray(order)) {
-    return NextResponse.json({ error: "order must be an array" }, { status: 400 });
-  }
-
-  await savePropertyImageOrder(propertyId, order);
-  return NextResponse.json({ success: true });
 }

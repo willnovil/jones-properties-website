@@ -41,12 +41,16 @@ export default function ImageReorder({ propertyId, initialOrder, onSaved }: Prop
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ propertyId, order }),
+        redirect: "error",
       });
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || `Save failed (${res.status})`);
+      }
       setDirty(false);
       onSaved();
-    } catch {
-      alert("Failed to save image order. Please try again.");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to save image order. Please try again.");
     } finally {
       setSaving(false);
     }
